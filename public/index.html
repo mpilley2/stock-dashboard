@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Pulse - MES/MNQ Intraday Intelligence</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- HEADER -->
+  <div id="header">
+    <div class="header-left">
+      <span class="logo-icon">📊</span>
+      <h1>Market <span style="color: var(--blue);">Pulse</span></h1>
+    </div>
+    <div class="header-right">
+      <span class="clock" id="clock">--:--:--</span>
+      <span id="market-status-badge" class="badge badge-closed">MARKET CLOSED</span>
+    </div>
+  </div>
+
+  <!-- INDICES BAR -->
+  <div class="indices-bar">
+    <div id="indices-scroll" class="indices-scroll"></div>
+  </div>
+
+  <!-- TAB NAVIGATION -->
+  <nav class="tab-nav">
+    <button class="main-tab tab-btn active" data-tab="dashboard">Dashboard</button>
+    <button class="main-tab tab-btn" data-tab="economic-calendar">Economic Calendar</button>
+    <button class="main-tab tab-btn" data-tab="fed-fomc">Fed & FOMC</button>
+    <button class="main-tab tab-btn" data-tab="news-tab">News</button>
+    <button class="main-tab tab-btn" data-tab="alerts-tab">Alerts</button>
+  </nav>
+
+  <!-- ============================================ -->
+  <!-- DASHBOARD TAB -->
+  <!-- ============================================ -->
+  <div id="dashboard" class="tab-panel active">
+    <main>
+      <!-- HERO: Daily Briefing -->
+      <div id="briefing-card" class="card briefing-hero">
+        <div class="briefing-header">
+          <div class="briefing-title-row">
+            <h2>MES/MNQ Intraday Briefing</h2>
+            <span id="briefing-time" class="briefing-timestamp">Loading...</span>
+          </div>
+          <div id="briefing-score-section" class="briefing-score-section">
+            <div id="briefing-circle" class="briefing-circle neutral">
+              <div id="briefing-signal" class="briefing-signal">...</div>
+              <div id="briefing-score" class="briefing-score-value">--</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Written Analysis -->
+        <div id="briefing-analysis" class="briefing-analysis">
+          <p class="empty-msg">Analyzing market conditions...</p>
+        </div>
+
+        <!-- Key Metrics Bar -->
+        <div id="briefing-metrics" class="briefing-metrics"></div>
+
+        <!-- Factor Breakdown -->
+        <div id="briefing-factors" class="briefing-factors"></div>
+      </div>
+
+      <!-- Sector Heatmap -->
+      <div class="card sector-heatmap-card">
+        <div class="card-header">
+          <h2>Sector Heatmap</h2>
+        </div>
+        <div id="sector-heatmap" class="sector-heatmap"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ECONOMIC CALENDAR TAB -->
+  <!-- ============================================ -->
+  <div id="economic-calendar" class="tab-panel">
+    <main>
+      <div class="card">
+        <div class="card-header">
+          <h2>Economic Calendar (USD High Impact)</h2>
+        </div>
+        <div style="padding: 16px;">
+          <div class="filter-buttons">
+            <button class="econ-filter-btn filter-btn active" data-filter="all">All</button>
+            <button class="econ-filter-btn filter-btn" data-filter="high">High Impact</button>
+            <button class="econ-filter-btn filter-btn" data-filter="fed">Fed/FOMC</button>
+            <button class="econ-filter-btn filter-btn" data-filter="employment">Employment</button>
+            <button class="econ-filter-btn filter-btn" data-filter="inflation">Inflation</button>
+          </div>
+          <div class="earnings-calendar-table">
+            <table class="calendar-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Event</th>
+                  <th>Impact</th>
+                  <th>Previous</th>
+                  <th>Forecast</th>
+                  <th>Actual</th>
+                </tr>
+              </thead>
+              <tbody id="economic-calendar-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- FED & FOMC TAB -->
+  <!-- ============================================ -->
+  <div id="fed-fomc" class="tab-panel">
+    <main>
+      <div class="card">
+        <div class="card-header">
+          <h2>Federal Reserve & FOMC</h2>
+        </div>
+        <div style="padding: 16px;">
+          <div id="fed-events-container" class="event-timeline"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- NEWS TAB -->
+  <!-- ============================================ -->
+  <div id="news-tab" class="tab-panel">
+    <main>
+      <div class="card">
+        <div class="card-header">
+          <h2>Market News</h2>
+        </div>
+        <div id="news-tab-container" class="news-feed" style="padding: 16px;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ALERTS TAB -->
+  <!-- ============================================ -->
+  <div id="alerts-tab" class="tab-panel">
+    <main>
+      <div class="card">
+        <div class="card-header">
+          <h2>Price Alerts</h2>
+          <button id="create-alert-btn" class="btn-sm btn-primary">+ New Alert</button>
+        </div>
+        <div style="padding: 16px;">
+          <h3 style="margin-bottom: 12px; font-size: 14px;">Active Alerts</h3>
+          <div id="active-alerts-container" class="alerts-list">
+            <p class="empty-msg">No active alerts</p>
+          </div>
+          <h3 style="margin: 20px 0 12px; font-size: 14px;">Triggered Alerts</h3>
+          <div id="triggered-alerts-container" class="alerts-list">
+            <p class="empty-msg">No triggered alerts</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ALERT MODAL -->
+  <div id="alert-modal" class="modal">
+    <div class="modal-content">
+      <h3>Create Alert</h3>
+      <input type="text" id="alert-symbol" placeholder="Symbol (e.g. MES=F)">
+      <select id="alert-type" style="width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:8px; font-size:14px; margin-bottom:12px;">
+        <option value="price_above">Price Above</option>
+        <option value="price_below">Price Below</option>
+        <option value="pct_up">% Change Up</option>
+        <option value="pct_down">% Change Down</option>
+      </select>
+      <input type="number" id="alert-value" placeholder="Value" step="0.01">
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button id="save-alert-btn" class="btn-sm btn-primary" style="flex:1;">Save Alert</button>
+        <button id="cancel-alert-btn" class="btn-sm" style="flex:1;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="app.js"></script>
+</body>
+</html>
